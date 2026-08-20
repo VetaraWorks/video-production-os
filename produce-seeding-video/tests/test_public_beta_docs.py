@@ -84,6 +84,13 @@ class PublicBetaDocumentationTests(unittest.TestCase):
         self.assertEqual(legacy, [])
         self.assertFalse((ROOT / "docs" / "archive").exists())
 
+    def test_public_issue_links_do_not_point_to_private_source_repository(self) -> None:
+        config = (ROOT / ".github" / "ISSUE_TEMPLATE" / "config.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("VetaraWorks/video-production-os/security/advisories/new", config)
+        self.assertEqual(config.count("https://github.com/"), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
