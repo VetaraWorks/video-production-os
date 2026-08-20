@@ -1,0 +1,10 @@
+{
+  "name": "video-os-public-beta-runtime",
+  "version": "7.5.0-public-beta",
+  "private": true,
+  "license": "AGPL-3.0-or-later",
+  "description": "Pinned Node runtime dependency for the optional Gemini Browser Worker.",
+  "dependencies": {
+    "playwright": "1.62.1"
+  }
+}

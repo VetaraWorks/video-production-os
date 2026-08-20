@@ -1,0 +1,29 @@
+name: Compatibility
+description: Report a host runtime or Provider compatibility problem
+title: "[Compatibility] "
+labels: [compatibility]
+body:
+  - type: input
+    id: windows
+    attributes: {label: Windows version}
+    validations: {required: true}
+  - type: input
+    id: hardware
+    attributes: {label: CPU and GPU}
+    validations: {required: true}
+  - type: input
+    id: browser
+    attributes: {label: Browser and version}
+    validations: {required: true}
+  - type: input
+    id: ffmpeg
+    attributes: {label: FFmpeg and ffprobe versions}
+    validations: {required: true}
+  - type: input
+    id: provider
+    attributes: {label: Provider and model}
+    validations: {required: true}
+  - type: textarea
+    id: doctor
+    attributes: {label: Doctor result and redacted report.zip}
+    validations: {required: true}

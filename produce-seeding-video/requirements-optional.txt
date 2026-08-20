@@ -1,0 +1,5 @@
+# Optional helpers only; the default Core and Perception Providers do not need these.
+numpy
+pymediainfo
+imageio
+uiautomation>=2; sys_platform == "win32"

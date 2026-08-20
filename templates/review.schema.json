@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "governance review v2",
+  "description": "候选审核或规则生命周期审核；每条记录只追加、不可覆盖，并带内容 hash。",
+  "type": "object",
+  "required": [
+    "schema_version", "review_type", "review_id", "decision", "reviewer",
+    "reason", "reviewed_at", "review_hash"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "review_type": {"enum": ["candidate", "rule_lifecycle"]},
+    "review_id": {"type": "string"},
+    "candidate_id": {"type": "string"},
+    "candidate_revision": {"type": "integer", "minimum": 1},
+    "candidate_content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidence_snapshot": {"type": "array", "minItems": 1},
+    "decision": {"enum": ["approve", "reject", "defer", "reopen", "activate", "deactivate", "deprecate", "revoke"]},
+    "reviewer": {
+      "type": "object",
+      "required": ["type", "name"],
+      "properties": {
+        "type": {"const": "human"},
+        "name": {"type": "string", "minLength": 1}
+      }
+    },
+    "reason": {"type": "string", "minLength": 1},
+    "rule_binding": {"type": "object"},
+    "scope_adjustment": {"type": ["object", "null"]},
+    "conflict_resolution": {"type": ["string", "null"]},
+    "resume_when": {"type": ["object", "null"]},
+    "reviewed_at": {"type": "string"},
+    "review_hash": {
+      "type": "object",
+      "required": ["algorithm", "sha256"],
+      "properties": {
+        "algorithm": {"const": "video-os-candidate-review-v2"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"review_type": {"const": "candidate"}}},
+      "then": {"required": ["candidate_id", "candidate_revision", "candidate_content_hash", "evidence_snapshot"]},
+      "else": {"required": ["rule_binding"]}
+    }
+  ]
+}

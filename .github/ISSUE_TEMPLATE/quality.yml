@@ -1,0 +1,27 @@
+name: Output quality
+description: Report a verified editing or repair quality problem
+title: "[Quality] "
+labels: [quality]
+body:
+  - type: input
+    id: version
+    attributes: {label: Video OS version}
+    validations: {required: true}
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options: [shot selection, pacing, subtitles, duplicate footage, semantic alignment, repair effectiveness, other]
+    validations: {required: true}
+  - type: textarea
+    id: observation
+    attributes: {label: Timestamped observation}
+    validations: {required: true}
+  - type: textarea
+    id: repair
+    attributes: {label: Did Repair improve it?}
+    validations: {required: true}
+  - type: textarea
+    id: report
+    attributes: {label: Redacted report.zip and non-sensitive evidence}
+    validations: {required: true}

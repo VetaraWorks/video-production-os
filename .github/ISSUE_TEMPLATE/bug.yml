@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a reproducible functional failure
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes: {label: Video OS version}
+    validations: {required: true}
+  - type: input
+    id: environment
+    attributes: {label: OS and GPU}
+    validations: {required: true}
+  - type: input
+    id: provider
+    attributes: {label: Provider and model/browser}
+    validations: {required: true}
+  - type: input
+    id: stage
+    attributes: {label: Failure stage}
+    validations: {required: true}
+  - type: textarea
+    id: expected
+    attributes: {label: Expected behavior}
+    validations: {required: true}
+  - type: textarea
+    id: actual
+    attributes: {label: Actual behavior}
+    validations: {required: true}
+  - type: textarea
+    id: report
+    attributes:
+      label: Redacted report.zip
+      description: Attach output from video_os.py report. Never attach media, .env, keys, cookies, or browser profiles.
+    validations: {required: true}

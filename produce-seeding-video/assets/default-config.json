@@ -1,0 +1,194 @@
+{
+  "version": 2,
+  "template": "fixed-60s-v1",
+  "video_os": {
+    "max_attempts": 2,
+    "max_repair_attempts": 2,
+    "review": {
+      "enabled": true,
+      "worker_config": null,
+      "work_root": null,
+      "timeout_seconds": 300
+    },
+    "planner_memory": {
+      "mode": "shadow",
+      "context": {
+        "video_type": null,
+        "client": null,
+        "style_profile": null,
+        "platform": null
+      }
+    }
+  },
+  "canvas": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "duration_seconds": 60.0,
+  "perception": {
+    "enabled": true,
+    "required": true,
+    "auto_run": true,
+    "worker_config": null,
+    "work_root": null,
+    "node": null,
+    "timeout_seconds": 300,
+    "path": "perception/perception.json",
+    "on_invalid": "fail",
+    "require_input_signature": true,
+    "require_all_sources": true,
+    "verify_source_signature": true,
+    "duration_tolerance_seconds": 1.0,
+    "minimum_confidence": 0.55,
+    "minimum_quality_score": 0.55,
+    "allow_duplicate_fingerprint": false,
+    "max_shot_seconds": 3.5,
+    "max_talking_shot_seconds": 6.0
+  },
+  "template_segments": [
+    {
+      "id": "hook",
+      "start": 0.0,
+      "end": 3.0,
+      "intent": "强钩子、人物或产品立即出现",
+      "preferred_tags": ["hook", "talking", "product"]
+    },
+    {
+      "id": "explain",
+      "start": 3.0,
+      "end": 15.0,
+      "intent": "真人口播解释产品与核心卖点",
+      "preferred_tags": ["talking", "product"]
+    },
+    {
+      "id": "product",
+      "start": 15.0,
+      "end": 30.0,
+      "intent": "产品展示与细节镜头",
+      "preferred_tags": ["product", "detail", "talking"]
+    },
+    {
+      "id": "proof",
+      "start": 30.0,
+      "end": 45.0,
+      "intent": "效果、对比或卖点强化",
+      "preferred_tags": ["proof", "product", "detail"]
+    },
+    {
+      "id": "cta",
+      "start": 45.0,
+      "end": 60.0,
+      "intent": "购买引导与行动号召",
+      "preferred_tags": ["cta", "talking", "product"]
+    }
+  ],
+  "subtitles": {
+    "enabled": true,
+    "format": "ass",
+    "filename": "subtitles.ass",
+    "srt_filename": "subtitles.srt",
+    "preset": "social-bold",
+    "font": "Microsoft YaHei",
+    "font_size": 64,
+    "hook_font_size": 70,
+    "margin_v": 480,
+    "outline": 5,
+    "shadow": 1,
+    "bold": true,
+    "max_chars_per_cue": 10,
+    "max_chars_per_line": 12,
+    "primary_color": "#FFFFFF",
+    "outline_color": "#151515",
+    "highlight_color": "#FFE66D",
+    "highlight_scale_percent": 108,
+    "max_highlights_per_cue": 2,
+    "auto_highlight": true,
+    "highlight_keywords": [
+      "防水",
+      "防汗",
+      "持妆",
+      "磨皮",
+      "遮瑕",
+      "自然",
+      "放大",
+      "显瘦",
+      "温和",
+      "不卡",
+      "不晕",
+      "不脱",
+      "活动",
+      "买",
+      "送",
+      "试试",
+      "下单"
+    ],
+    "pop_animation": true
+  },
+  "bgm": {
+    "enabled": true,
+    "path": null,
+    "volume": 0.1,
+    "fade_seconds": 0.8,
+    "ducking": {
+      "enabled": true,
+      "threshold": 0.035,
+      "ratio": 8,
+      "attack_ms": 18,
+      "release_ms": 280
+    }
+  },
+  "sound_effects": {
+    "enabled": true,
+    "events": [
+      {
+        "segment": "hook",
+        "offset": 0.08,
+        "asset": "sfx/pop-soft.wav",
+        "volume": 0.22
+      },
+      {
+        "segment": "product",
+        "offset": 0.0,
+        "asset": "sfx/whoosh-soft.wav",
+        "volume": 0.16
+      },
+      {
+        "segment": "proof",
+        "offset": 0.0,
+        "asset": "sfx/whoosh-soft.wav",
+        "volume": 0.14
+      },
+      {
+        "segment": "cta",
+        "offset": 0.05,
+        "asset": "sfx/ding-soft.wav",
+        "volume": 0.18
+      }
+    ]
+  },
+  "audio": {
+    "voice_volume": 1.0,
+    "normalize": true,
+    "target_lufs": -15.0,
+    "true_peak_db": -1.5,
+    "lra": 9.0
+  },
+  "encoder": {
+    "video_codec": "libx264",
+    "preset": "medium",
+    "crf": 20,
+    "audio_codec": "aac",
+    "audio_bitrate": "192k"
+  },
+  "output": {
+    "filename": "final.mp4",
+    "duration_tolerance_seconds": 0.75
+  },
+  "jianying_export": {
+    "enabled": false,
+    "draft_root": null,
+    "draft_name": null,
+    "portable_media": false
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "knowledge manifest",
+  "description": "知识库清单：schema 版本、各目录条目数、最近更新时间。",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "counts"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "updated_at": {"type": "string"},
+    "counts": {
+      "type": "object",
+      "properties": {
+        "edits": {"type": "integer"},
+        "repair_log": {"type": "integer"},
+        "rule_candidates": {"type": "integer"},
+        "editing_rules": {"type": "integer"},
+        "reviews": {"type": "integer"},
+        "governance_history": {"type": "integer"},
+        "good_cases": {"type": "integer"},
+        "bad_cases": {"type": "integer"},
+        "style_profile": {"type": "integer"},
+        "client_preferences": {"type": "integer"}
+      }
+    },
+    "note": {"type": "string"}
+  }
+}

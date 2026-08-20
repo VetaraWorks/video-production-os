@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "rule_candidate",
+  "description": "待人工确认的规则候选。自动阶段唯一写入口；绝不自动转正。",
+  "type": "object",
+  "required": [
+    "rule_id",
+    "candidate_id",
+    "status",
+    "category",
+    "rule_class",
+    "rule_type",
+    "scope",
+    "expression",
+    "description",
+    "support",
+    "confidence",
+    "confidence_factors",
+    "weighted_evidence",
+    "evidence_count",
+    "project_count",
+    "version_count",
+    "human_feedback_count",
+    "repair_evidence_count",
+    "evidence",
+    "contradicting_evidence",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "rule_id": {"type": "string"},
+    "candidate_id": {"type": "string"},
+    "lineage_id": {"type": "string"},
+    "revision": {"type": "integer", "minimum": 1},
+    "supersedes_candidate_id": {"type": ["string", "null"]},
+    "status": {
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected",
+        "obsolete",
+        "candidate",
+        "reviewing",
+        "approved",
+        "deferred",
+        "conflicted",
+        "stale"
+      ]
+    },
+    "category": {"type": "string"},
+    "rule_class": {"enum": ["hard", "editing", "style", "audit"]},
+    "rule_type": {"enum": ["timing", "rhythm", "shot_selection"]},
+    "type": {"enum": ["quantitative", "qualitative"]},
+    "metric": {
+      "type": ["object", "null"],
+      "properties": {
+        "name": {"type": "string"},
+        "operator": {"type": "string"},
+        "value": {"type": "number"}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "video_type": {"type": ["string", "null"]},
+        "client": {"type": ["string", "null"]},
+        "style_profile": {"type": ["string", "null"]}
+      }
+    },
+    "expression": {
+      "type": "object",
+      "properties": {
+        "metric": {"type": "string"},
+        "operator": {"type": "string"},
+        "value": {"type": "number"},
+        "constraint": {"type": "string"}
+      }
+    },
+    "description": {"type": "string"},
+    "applicability": {
+      "type": "object",
+      "properties": {
+        "template": {"type": "array", "items": {"type": "string"}},
+        "segment_ids": {"type": "array", "items": {"type": "string"}},
+        "client_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "confidence_factors": {
+      "type": "object",
+      "properties": {
+        "evidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "consistency": {"type": "number", "minimum": 0, "maximum": 1},
+        "diversity": {"type": "number", "minimum": 0, "maximum": 1},
+        "human_ratio": {"type": "number", "minimum": 0, "maximum": 1},
+        "conflict_penalty": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "weighted_evidence": {"type": "number", "minimum": 0},
+    "evidence_count": {"type": "integer", "minimum": 0},
+    "project_count": {"type": "integer", "minimum": 0},
+    "version_count": {"type": "integer", "minimum": 0},
+    "human_feedback_count": {"type": "integer", "minimum": 0},
+    "repair_evidence_count": {"type": "integer", "minimum": 0},
+    "support": {"type": "integer", "minimum": 0},
+    "consistency": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "sources": {"type": "array", "items": {"type": "string"}},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "ref", "snapshot_ref"],
+        "properties": {
+          "kind": {"enum": ["feedback", "repair_log", "production_evidence", "review", "qa_report"]},
+          "ref": {"type": "string"},
+          "snapshot_ref": {"type": "string"}
+        }
+      }
+    },
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"},
+    "confirmed_at": {"type": ["string", "null"]},
+    "confirmed_by": {"type": ["string", "null"]},
+    "last_applied_at": {"type": ["string", "null"]},
+    "conflicts_with": {"type": "array", "items": {"type": "string"}},
+    "contradicting_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "ref", "snapshot_ref"],
+        "properties": {
+          "kind": {"enum": ["feedback", "repair_log", "production_evidence", "review", "qa_report"]},
+          "ref": {"type": "string"},
+          "snapshot_ref": {"type": "string"}
+        }
+      }
+    },
+    "rejected_reason": {"type": ["string", "null"]}
+  }
+}

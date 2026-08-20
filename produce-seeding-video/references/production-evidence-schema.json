@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://video-os.local/schemas/production-evidence-v1.json",
+  "title": "Video OS Production Evidence v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "evidence_kind",
+    "project_id",
+    "project",
+    "source_identity",
+    "evidence_tier",
+    "tier_history",
+    "created_at",
+    "updated_at",
+    "actions",
+    "verification",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evidence_id": {"type": "string", "pattern": "^evidence-[0-9a-f]{20}$"},
+    "evidence_kind": {"enum": ["automatic_repair", "manual_edit"]},
+    "project_id": {"type": "string", "minLength": 1},
+    "project": {"type": "string", "minLength": 1},
+    "source_identity": {
+      "type": "object",
+      "required": ["project_id", "project", "run_id"],
+      "properties": {
+        "project_id": {"type": "string", "minLength": 1},
+        "project": {"type": "string", "minLength": 1},
+        "run_id": {"type": "string", "minLength": 1},
+        "review_task_id": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "evidence_tier": {
+      "enum": ["observed", "human_verified", "production_verified"]
+    },
+    "tier_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "at", "actor", "reason"],
+        "properties": {
+          "from": {"type": ["string", "null"]},
+          "to": {"enum": ["observed", "human_verified", "production_verified"]},
+          "at": {"type": "string", "format": "date-time"},
+          "actor": {"type": "string", "minLength": 1},
+          "reason": {"type": "string", "minLength": 1},
+          "gate_material_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "video": {
+      "type": ["object", "null"],
+      "properties": {
+        "before": {"$ref": "#/$defs/videoIdentity"},
+        "after": {"anyOf": [{"$ref": "#/$defs/videoIdentity"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["issue_id", "category", "severity", "time_range"],
+        "additionalProperties": true
+      }
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/action"}
+    },
+    "qa_result": {"type": ["object", "null"]},
+    "post_review_result": {"type": ["object", "null"]},
+    "planner_memory": {
+      "type": ["object", "null"],
+      "properties": {
+        "memory_applied": {"type": "boolean"},
+        "mode": {"type": ["string", "null"], "enum": ["off", "shadow", "advisory", null]},
+        "base_plan_signature": {"type": ["string", "null"]},
+        "memory_context_signature": {"type": ["string", "null"]},
+        "memory_application_signature": {"type": ["string", "null"]},
+        "applied_rules": {"type": "array"},
+        "final_plan_reference": {"type": "string"},
+        "base_plan_reference": {"type": "string"},
+        "context_reference": {"type": "string"},
+        "application_reference": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": ["status", "gate", "errors"],
+      "properties": {
+        "status": {"enum": ["awaiting_post_review", "human_verified", "rejected", "passed"]},
+        "gate": {
+          "anyOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "required": ["name", "material_digest", "checks", "approved_at"],
+              "properties": {
+                "name": {"const": "production_evidence_gate_v1"},
+                "material_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+                "checks": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+                "approved_at": {"type": "string", "format": "date-time"}
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "errors": {"type": "array", "items": {"type": "string"}},
+        "checked_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["references", "chain_digest"],
+      "properties": {
+        "references": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/$defs/reference"}
+        },
+        "chain_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "knowledge_sync": {"type": "object"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "videoIdentity": {
+      "type": "object",
+      "required": ["reference", "signature", "sha256"],
+      "properties": {
+        "reference": {"type": "string", "minLength": 1},
+        "signature": {
+          "type": "object",
+          "required": ["size_bytes", "mtime_ns", "sample_sha256"]
+        },
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "reference": {
+      "type": "object",
+      "required": ["kind", "path", "uri", "sha256"],
+      "properties": {
+        "kind": {"enum": ["json", "media"]},
+        "path": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "pattern": "^project://"},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "signature": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "action_id",
+        "type",
+        "issue_refs",
+        "target",
+        "scope",
+        "field",
+        "metric",
+        "operator",
+        "before",
+        "after",
+        "value",
+        "reason"
+      ],
+      "properties": {
+        "action_id": {"type": "string", "minLength": 1},
+        "type": {"type": "string", "minLength": 1},
+        "issue_refs": {"type": "array", "items": {"type": "string"}},
+        "target": {
+          "type": "object",
+          "required": ["segment_id", "time_range"],
+          "properties": {
+            "segment_id": {"type": "string"},
+            "time_range": {
+              "type": "object",
+              "required": ["start", "end"],
+              "properties": {
+                "start": {"type": ["number", "null"]},
+                "end": {"type": ["number", "null"]}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "scope": {"type": "object"},
+        "field": {"type": "string"},
+        "metric": {"type": "string"},
+        "operator": {"type": "string", "minLength": 1},
+        "before": {},
+        "after": {},
+        "value": {},
+        "reason": {"type": "string", "minLength": 1},
+        "parameters": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

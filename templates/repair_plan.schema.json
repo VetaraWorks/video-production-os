@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "repair_plan",
+  "type": "object",
+  "required": ["schema_version", "project", "source_reports", "actions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "project": {"type": "string"},
+    "source_reports": {"type": "array", "items": {"type": "string"}},
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id": {"type": "string"},
+          "type": {
+            "enum": ["fix_subtitle", "replace_clip", "adjust_trim"]
+          },
+          "segment_id": {"type": "string"},
+          "reason": {"type": "string"},
+          "kind": {"enum": ["text", "timing"]},
+          "text_from": {"type": "string"},
+          "text_to": {"type": "string"},
+          "cue_index": {"type": "integer"},
+          "new_start": {"type": "number"},
+          "new_end": {"type": "number"},
+          "shift_seconds": {"type": "number"},
+          "after": {
+            "type": "object",
+            "properties": {
+              "source": {"type": "string"},
+              "source_start": {"type": "number"},
+              "source_duration": {"type": "number"},
+              "duration": {"type": "number"},
+              "has_audio": {"type": "boolean"},
+              "loop": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+    "needs_human": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "口播种草视频自动剪辑"
+  short_description: "生成带关键词高亮字幕、节点音效和自动混音的竖屏种草视频"
+  default_prompt: "Use $produce-seeding-video to turn my script and product footage into a validated vertical seeding video with styled subtitles and restrained sound effects."

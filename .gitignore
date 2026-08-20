@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Local secrets and authenticated browser state
+.env
+.env.*
+!.env.example
+**/worker-config.json
+**/chrome-profile/
+**/chrome-user-data/
+**/browser-profile/
+**/worker-process.json
+**/browser-session.json
+**/video-os.json
+**/Cookies
+**/Cookies-journal
+**/Local State
+
+# Generated project history and durable worker state are local-only
+/projects/**
+!/projects/.gitkeep
+/qa/batch_report.json
+/qa/**/perception/project_manifest.json
+/qa/**/perception/tasks/
+/.release-worktrees/
+
+# 工具与依赖二进制
+/tools/
+/third_party/
+
+# 大型工作目录（媒体、产物、中间文件）
+/runs/
+/tmp/
+/dist/
+/.tmp/
+**/.tmp/
+**/node_modules/
+/qa/**/output/
+**/preprocess/
+**/proxy/
+
+# 大媒体文件（保留技能内置 SFX 资源）
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.png
+*.jpg
+*.jpeg
+*.wav
+*.mp3
+*.m4a
+!produce-seeding-video/assets/sfx/*.wav
+
+# 生成日志
+*.log
+*.pid

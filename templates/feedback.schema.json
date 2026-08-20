@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "feedback (v2)",
+  "description": "人工修改记录：记录“为什么改”。schema_version=2。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "feedback_id",
+    "project",
+    "from_version",
+    "to_version",
+    "collector",
+    "collected_at",
+    "changes"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "evidence_tier": {
+      "enum": ["production_verified", "demo", "migrated_unverified"]
+    },
+    "feedback_id": {"type": "string"},
+    "project": {"type": "string"},
+    "from_version": {"type": "string"},
+    "to_version": {"type": "string"},
+    "collector": {"enum": ["manual", "video_os_feedback"]},
+    "collected_at": {"type": "string"},
+    "source_docs": {"type": "array", "items": {"type": "string"}},
+    "snapshot_refs": {"type": "array", "items": {"type": "string"}},
+    "changes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "change_id",
+          "category",
+          "target",
+          "before",
+          "after",
+          "reason",
+          "rule_class",
+          "status"
+        ],
+        "properties": {
+          "change_id": {"type": "string"},
+          "category": {
+            "enum": [
+              "rhythm",
+              "hook",
+              "structure",
+              "shot_count",
+              "semantic_split",
+              "subtitle_style",
+              "sound_effect",
+              "cover",
+              "pacing",
+              "repetition",
+              "audio",
+              "compliance",
+              "repair",
+              "human_review",
+              "shot_selection",
+              "subtitle",
+              "composition",
+              "style_preference",
+              "other"
+            ]
+          },
+          "rule_class": {
+            "enum": ["hard", "editing", "style", "audit"]
+          },
+          "target": {
+            "type": "object",
+            "required": ["kind"],
+            "properties": {
+              "kind": {"enum": ["segment", "time_range", "whole_video"]},
+              "id": {"type": "string"},
+              "start": {"type": "number"},
+              "end": {"type": "number"}
+            }
+          },
+          "before": {
+            "type": "object",
+            "properties": {
+              "description": {"type": "string"},
+              "metric": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "value": {"type": "number"}
+                }
+              }
+            }
+          },
+          "after": {
+            "type": "object",
+            "properties": {
+              "description": {"type": "string"},
+              "metric": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "value": {"type": "number"}
+                }
+              }
+            }
+          },
+          "reason": {"type": "string"},
+          "rule_candidate": {"type": ["string", "null"]},
+          "rule_candidate_structured": {
+            "type": ["object", "null"],
+            "properties": {
+              "metric": {"type": "string"},
+              "operator": {"type": "string"},
+              "value": {"type": "number"}
+            }
+          },
+          "confidence": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+          "status": {"enum": ["pending", "referenced", "archived"]},
+          "source_docs": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

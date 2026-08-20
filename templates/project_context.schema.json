@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "project_context",
+  "description": "只读项目上下文，用于 L0 规则命中预演。缺失字段必须显式为 null，禁止猜测。",
+  "type": "object",
+  "required": ["schema_version", "project"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "project": {"type": "string"},
+    "version": {"type": ["string", "null"]},
+    "video_type": {"type": ["string", "null"]},
+    "client": {"type": ["string", "null"]},
+    "style_profile": {"type": ["string", "null"]},
+    "platform": {"type": ["string", "null"]},
+    "duration_target_s": {"type": ["number", "null"]},
+    "available_metrics": {
+      "type": "object",
+      "additionalProperties": {"type": "number"}
+    }
+  }
+}
